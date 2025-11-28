@@ -14,10 +14,6 @@ function Repeatable:new(opts)
   setmetatable(instance, self)
   self.__index = self
 
-  instance.passthrough_key = "<Plug>(better-n-#" .. instance.id .. ")"
-  instance.next_key = "<Plug>(better-n-#" .. instance.id .. "-next)"
-  instance.previous_key = "<Plug>(better-n-#" .. instance.id .. "-previous)"
-
   local keymap = Keymap:new({bufnr = opts.bufnr, mode = instance.mode})
   local next_action = opts.next or error("opts.next is required" .. vim.inspect(opts))
   local previous_action = opts.previous or error("opts.previous or opts.prev is required" .. vim.inspect(opts))
@@ -44,9 +40,6 @@ function Repeatable:new(opts)
   instance.passthrough = function()
     return instance:_passthrough()
   end
-
-  instance.prev = instance.previous
-  instance.prev_key = instance.previous_key
 
   return instance
 end

@@ -43,15 +43,11 @@ function Register:create(opts)
     register = self,
     bufnr = opts.bufnr or 0,
     next = opts.next,
-    previous = opts.previous or opts.prev,
-    passthrough = opts.initiate or opts.key or opts.next,
+    previous = opts.previous,
+    passthrough = opts.initiate or opts.next,
     mode = opts.mode or "n",
     id = opts.id,
   })
-
-  vim.keymap.set(repeatable.mode, repeatable.passthrough_key, repeatable.passthrough, { expr = true, silent = true })
-  vim.keymap.set(repeatable.mode, repeatable.next_key, repeatable.next, { expr = true, silent = true })
-  vim.keymap.set(repeatable.mode, repeatable.previous_key, repeatable.previous, { expr = true, silent = true })
 
   self.repeatables[repeatable.id] = repeatable
 

@@ -37,12 +37,6 @@ function Config.get_default_config()
   return {
     disable_default_mappings = false,
     disable_cmdline_mappings = false,
-    -- @deprecated
-    callbacks = {
-      mapping_executed = nil,
-    },
-    -- @deprecated
-    mappings = {},
   }
 end
 
