@@ -15,9 +15,9 @@ function Register:new()
 
   vim.api.nvim_create_autocmd("CmdlineLeave", {
     group = augroup,
-    callback = function()
+    callback = function(args)
       local abort = vim.v.event.abort
-      local cmdline_char = vim.fn.expand("<afile>")
+      local cmdline_char = args.match
 
       if not abort and instance.repeatables[cmdline_char] ~= nil then
         instance.last_repeatable_id = cmdline_char
@@ -29,9 +29,7 @@ function Register:new()
     group = augroup,
     pattern = { "BetterNMappingExecuted" },
     callback = function(args)
-      local repeatable_id = args.data.repeatable_id
-
-      instance.last_repeatable_id = repeatable_id
+      instance.last_repeatable_id = args.data.repeatable_id
     end,
   })
 

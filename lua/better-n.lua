@@ -1,25 +1,15 @@
 local Register = require("better-n.register")
-local Config = require("better-n.config")
 
-local M = {}
+local M = {
+  setup = require("better-n.config").apply,
+}
 
 function M.instance()
-  if _G.better_n_register ~= nil then
-    return _G.better_n_register
+  if _G.better_n_register == nil then
+    _G.better_n_register = Register:new()
   end
 
-  _G.better_n_register = Register:new()
-
   return _G.better_n_register
-end
-
-function M.setup(opts)
-  local defaults = Config.get_default_config()
-  local config = vim.tbl_deep_extend("force", defaults, opts)
-
-  Config.apply_config(config)
-
-  return M
 end
 
 function M.next()

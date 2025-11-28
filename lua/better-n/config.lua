@@ -1,7 +1,6 @@
-local Config = {}
-local P = {}
+local M = {}
 
-function P._setup_default_mappings()
+local function setup_default_mappings()
   local better_n = require("better-n")
 
   local f = better_n.create({ initiate = "f", next = ";", previous = "," })
@@ -26,28 +25,28 @@ function P._setup_default_mappings()
   vim.keymap.set({ "n", "x" }, "<s-n>", better_n.previous, { expr = true, silent = true, nowait = true })
 end
 
-function P._setup_cmdline_mappings()
+local function setup_cmdline_mappings()
   local better_n = require("better-n")
 
   better_n.create({ id = "/", next = "n", previous = "<s-n>" })
   better_n.create({ id = "?", next = "n", previous = "<s-n>" })
 end
 
-function Config.get_default_config()
-  return {
-    disable_default_mappings = false,
-    disable_cmdline_mappings = false,
-  }
-end
+local defaults = {
+  disable_default_mappings = false,
+  disable_cmdline_mappings = false,
+}
 
-function Config.apply_config(config)
+function M.apply(opts)
+  local config = vim.tbl_deep_extend("keep", opts, defaults)
+
   if not config.disable_cmdline_mappings then
-    P._setup_cmdline_mappings()
+    setup_cmdline_mappings()
   end
 
   if not config.disable_default_mappings then
-    P._setup_default_mappings()
+    setup_default_mappings()
   end
 end
 
-return Config
+return M

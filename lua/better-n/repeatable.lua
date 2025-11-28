@@ -11,8 +11,7 @@ function Repeatable:new(opts)
     bufnr = opts.bufnr
   }
 
-  setmetatable(instance, self)
-  self.__index = self
+  setmetatable(instance, Repeatable)
 
   local keymap = Keymap:new({bufnr = opts.bufnr, mode = instance.mode})
   local next_action = opts.next or error("opts.next is required" .. vim.inspect(opts))
@@ -32,54 +31,30 @@ function Repeatable:new(opts)
   instance.previous_action = previous_action
 
   instance.next = function()
-    return instance:_next()
+    return instance:_run_action(instance.next_action)
   end
   instance.previous = function()
-    return instance:_previous()
+    return instance:_run_action(instance.previous_action)
   end
   instance.passthrough = function()
-    return instance:_passthrough()
+    return instance:_run_action(instance.passthrough_action)
   end
 
   return instance
 end
 
-function Repeatable:_next()
+Repeatable.__index = Repeatable
+
+function Repeatable:_run_action(action)
   vim.api.nvim_exec_autocmds("User", {
     pattern = { "BetterNNext", "BetterNMappingExecuted" },
     data = { repeatable_id = self.id, key = self.id, mode = vim.fn.mode() },
   })
 
-  if type(self.next_action) == "function" then
-    return vim.schedule(self.next_action)
+  if type(action) == "function" then
+    return vim.schedule(action)
   else
-    return self.next_action
-  end
-end
-
-function Repeatable:_previous()
-  vim.api.nvim_exec_autocmds("User", {
-    pattern = { "BetterNPrevious", "BetterNMappingExecuted" },
-    data = { repeatable_id = self.id, key = self.id, mode = vim.fn.mode() },
-  })
-
-  if type(self.previous_action) == "function" then
-    return vim.schedule(self.previous_action)
-  else
-    return self.previous_action
-  end
-end
-
-function Repeatable:_passthrough()
-  vim.api.nvim_exec_autocmds("User", {
-    pattern = { "BetterNPassthrough", "BetterNMappingExecuted" },
-    data = { repeatable_id = self.id, key = self.id, mode = vim.fn.mode() },
-  })
-
-  if type(self.passthrough_action) == "function" then
-    return vim.schedule(self.passthrough_action)
-  else
-    return self.passthrough_action
+    return action
   end
 end
 
