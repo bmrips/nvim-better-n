@@ -1,44 +1,34 @@
 local Repeatable = require("better-n.repeatable")
 
+local M = {}
+
 local augroup = vim.api.nvim_create_augroup("BetterN", {})
 
-local Register = {}
+local last_repeatable_id = nil
+local repeatables = {}
 
-function Register:new()
-  local instance = {
-    last_repeatable_id = nil,
-    repeatables = {},
-  }
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  group = augroup,
+  callback = function(args)
+    local abort = vim.v.event.abort
+    local cmdline_char = args.match
 
-  setmetatable(instance, self)
-  self.__index = self
+    if not abort and repeatables[cmdline_char] ~= nil then
+      last_repeatable_id = cmdline_char
+    end
+  end,
+})
 
-  vim.api.nvim_create_autocmd("CmdlineLeave", {
-    group = augroup,
-    callback = function(args)
-      local abort = vim.v.event.abort
-      local cmdline_char = args.match
+vim.api.nvim_create_autocmd("User", {
+  group = augroup,
+  pattern = { "BetterNMappingExecuted" },
+  callback = function(args)
+    last_repeatable_id = args.data.repeatable_id
+  end,
+})
 
-      if not abort and instance.repeatables[cmdline_char] ~= nil then
-        instance.last_repeatable_id = cmdline_char
-      end
-    end,
-  })
-
-  vim.api.nvim_create_autocmd("User", {
-    group = augroup,
-    pattern = { "BetterNMappingExecuted" },
-    callback = function(args)
-      instance.last_repeatable_id = args.data.repeatable_id
-    end,
-  })
-
-  return instance
-end
-
-function Register:create(opts)
+function M.create(opts)
   local repeatable = Repeatable:new({
-    register = self,
     bufnr = opts.bufnr or 0,
     next = opts.next,
     previous = opts.previous,
@@ -47,35 +37,35 @@ function Register:create(opts)
     id = opts.id,
   })
 
-  self.repeatables[repeatable.id] = repeatable
+  repeatables[repeatable.id] = repeatable
 
   return repeatable
 end
 
-function Register:next()
-  if self.last_repeatable_id == nil then
+function M.next()
+  if last_repeatable_id == nil then
     return
   end
 
-  return self.repeatables[self.last_repeatable_id]:next()
+  return repeatables[last_repeatable_id]:next()
 end
 
-function Register:previous()
-  if self.last_repeatable_id == nil then
+function M.previous()
+  if last_repeatable_id == nil then
     return
   end
 
-  return self.repeatables[self.last_repeatable_id]:previous()
+  return repeatables[last_repeatable_id]:previous()
 end
 
 -- Workaround for # only working for array-based tables
-function Register:_num_repeatables()
+function M._num_repeatables()
   local count = 0
-  for _ in pairs(self.repeatables) do
+  for _ in pairs(repeatables) do
     count = count + 1
   end
 
   return count
 end
 
-return Register
+return M

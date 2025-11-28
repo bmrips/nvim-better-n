@@ -4,9 +4,8 @@ local Repeatable = {}
 
 function Repeatable:new(opts)
   local instance = {
-    register = opts.register or error("opts.register is required" .. vim.inspect(opts)),
     passthrough_action = opts.passthrough or error("opts.passthrough is required" .. vim.inspect(opts)),
-    id = opts.id or opts.register:_num_repeatables(),
+    id = opts.id or require("better-n.register")._num_repeatables(),
     mode = opts.mode,
     bufnr = opts.bufnr
   }
