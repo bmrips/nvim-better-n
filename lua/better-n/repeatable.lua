@@ -3,21 +3,17 @@ local Keymap = require("better-n.lib.keymap")
 local Repeatable = {}
 
 function Repeatable:new(opts)
-  local instance = {
-    passthrough_action = opts.passthrough or error("opts.passthrough is required" .. vim.inspect(opts)),
-    id = opts.id or require("better-n.register")._num_repeatables(),
-    mode = opts.mode,
-    bufnr = opts.bufnr
-  }
+  local instance = vim.tbl_extend('error', opts, {
+    passthrough_action = opts.passthrough,
+  })
 
   setmetatable(instance, Repeatable)
 
   local keymap = Keymap:new({bufnr = opts.bufnr, mode = instance.mode})
-  local next_action = opts.next or error("opts.next is required" .. vim.inspect(opts))
-  local previous_action = opts.previous or error("opts.previous or opts.prev is required" .. vim.inspect(opts))
+  local next_action = opts.next
+  local previous_action = opts.previous
 
   -- Extract the actual action from the keymap if it's a string.
-  -- This is more robust, and solves some remap issues that can otherwise occur.
   if type(next_action) == "string" then
     next_action = (keymap[next_action] or {}).rhs or next_action
   end

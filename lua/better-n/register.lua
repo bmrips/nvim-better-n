@@ -30,11 +30,11 @@ vim.api.nvim_create_autocmd("User", {
 function M.create(opts)
   local repeatable = Repeatable:new({
     bufnr = opts.bufnr or 0,
-    next = opts.next,
-    previous = opts.previous,
-    passthrough = opts.initiate or opts.next,
+    next = opts.next or error("opts.next is required" .. vim.inspect(opts)),
+    previous = opts.previous or error("opts.previous is required" .. vim.inspect(opts)),
+    passthrough = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts)),
     mode = opts.mode or "n",
-    id = opts.id,
+    id = opts.id or M.gen_id(),
   })
 
   repeatables[repeatable.id] = repeatable
@@ -58,8 +58,8 @@ function M.previous()
   return repeatables[last_repeatable_id]:previous()
 end
 
--- Workaround for # only working for array-based tables
-function M._num_repeatables()
+function M.gen_id()
+  -- Workaround for # only working for array-based tables
   local count = 0
   for _ in pairs(repeatables) do
     count = count + 1
