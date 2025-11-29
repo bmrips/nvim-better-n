@@ -32,7 +32,7 @@ function M.create(opts)
     bufnr = opts.bufnr or 0,
     next = opts.next or error("opts.next is required" .. vim.inspect(opts)),
     previous = opts.previous or error("opts.previous is required" .. vim.inspect(opts)),
-    passthrough = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts)),
+    initiate = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts)),
     mode = opts.mode or "n",
     id = opts.id or M.gen_id(),
   })

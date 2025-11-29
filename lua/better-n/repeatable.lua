@@ -4,7 +4,7 @@ local Repeatable = {}
 
 function Repeatable:new(opts)
   local instance = vim.tbl_extend('error', opts, {
-    passthrough_action = opts.passthrough,
+    initiate_action = opts.initiate,
   })
 
   setmetatable(instance, Repeatable)
@@ -31,8 +31,8 @@ function Repeatable:new(opts)
   instance.previous = function()
     return instance:_run_action(instance.previous_action)
   end
-  instance.passthrough = function()
-    return instance:_run_action(instance.passthrough_action)
+  instance.initiate = function()
+    return instance:_run_action(instance.initiate_action)
   end
 
   return instance
