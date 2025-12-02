@@ -80,10 +80,16 @@ To make buffer-local mappings repeatable, you can wrap the mappings in a `FileTy
   "FileType",
   {
     callback = function(args)
-      local repeatable_square_brackets = require("better_n").create({ next = "]]", prev = "[[" })
+      local repeatable_square_brackets = require("better_n").create({
+        next = "]]",
+        prev = "[[",
+        remap = true,
+        bufnr = args.buf,
+      })
 
       vim.keymap.set("n", "]]", repeatable_square_brackets.next, { buffer = args.buf })
-      vim.keymap.set("n", "[[", repeatable_square_brackets.previous, { buffer = args.buf }))
+      vim.keymap.set("n", "[[", repeatable_square_brackets.previous, { buffer = args.buf })
+     end,
   }
 )
 ```

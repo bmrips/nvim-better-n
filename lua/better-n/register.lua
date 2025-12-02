@@ -35,6 +35,7 @@ function M.create(opts)
     initiate = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts)),
     mode = opts.mode or "n",
     id = opts.id or M.gen_id(),
+    remap = opts.remap or false,
   })
 
   repeatables[repeatable.id] = repeatable
