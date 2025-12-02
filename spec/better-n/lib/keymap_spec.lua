@@ -4,7 +4,7 @@ describe("__index", function()
   it("should return the correct mapping for a given key", function()
     vim.keymap.set("n", "<C-a>", "<cmd>test-keymap<cr>")
     local keymap = Keymap:new({ bufnr = nil, mode = "n" })
-    local mapping = keymap["<C-A>"]
+    local mapping = keymap:lookup("<C-A>")
 
     assert.is_not_nil(mapping)
     assert.are.equal("<C-A>", mapping.lhs)
@@ -14,7 +14,7 @@ describe("__index", function()
   it("should return the correct mapping for a given key bound for a specific buffer", function()
     vim.keymap.set("n", "]]", "<cmd>another-test-keymap<cr>", { buffer = 0 })
     local keymap = Keymap:new({ bufnr = 0, mode = "n" })
-    local mapping = keymap["]]"]
+    local mapping = keymap:lookup("]]")
 
     assert.is_not_nil(mapping)
     assert.are.equal("]]", mapping.lhs)
@@ -23,7 +23,7 @@ describe("__index", function()
 
   it("should return nil for a non-existent key", function()
     local keymap = Keymap:new({ bufnr = 0, mode = "n" })
-    local mapping = keymap["<C-x>"]
+    local mapping = keymap:lookup("<C-x>")
 
     assert.is_nil(mapping)
   end)
