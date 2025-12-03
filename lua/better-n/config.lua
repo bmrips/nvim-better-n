@@ -20,16 +20,22 @@ local function setup_default_mappings()
 
   local hash = better_n.create({ initiate = "#", next = "n", previous = "<s-n>" })
   vim.keymap.set({ "n", "x" }, "#", hash.initiate, { expr = true, silent = true })
-
-  vim.keymap.set({ "n", "x" }, "n", better_n.next, { expr = true, silent = true, nowait = true })
-  vim.keymap.set({ "n", "x" }, "<s-n>", better_n.previous, { expr = true, silent = true, nowait = true })
 end
 
 local function setup_cmdline_mappings()
-  local better_n = require("better-n")
+  vim.api.nvim_create_autocmd("CmdlineLeave", {
+    pattern = { "/", "\\?" },
+    desc = "Restore n/N after searching",
+    callback = function()
+      if vim.v.event.abort then
+        return
+      end
 
-  better_n.create({ id = "/", next = "n", previous = "<s-n>" })
-  better_n.create({ id = "?", next = "n", previous = "<s-n>" })
+      -- vim.keymap.del throws an error if n/N are not mapped
+      pcall(vim.keymap.del, { "n", "x" }, "n")
+      pcall(vim.keymap.del, { "n", "x" }, "<S-n>")
+    end,
+  })
 end
 
 local defaults = {

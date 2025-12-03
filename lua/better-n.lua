@@ -1,8 +1,4 @@
-local register = require("better-n.register")
-
 return {
-  next = register.next,
-  previous = register.previous,
-  create = register.create,
+  create = require("better-n.motion").create,
   setup = require("better-n.config").apply,
 }

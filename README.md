@@ -46,13 +46,6 @@ require("better-n").setup(
   }
 )
 
-vim.nvim_create_autocmd("User", {
-  pattern = "BetterNMappingExecuted",
-  callback = function(args)
-    -- args.data.repeatable_id and args.data.mode are available here
-  end
-})
-
 -- You create repeatable mappings like this:
 local hunk_navigation = require("better-n").create(
   {
