@@ -4,28 +4,28 @@ local function setup_default_mappings()
   local better_n = require("better-n")
 
   local f = better_n.create({ initiate = "f", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "f", f.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "f", f.initiate, f.map_args)
 
   local F = better_n.create({ initiate = "F", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "F", F.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "F", F.initiate, F.map_args)
 
   local t = better_n.create({ initiate = "t", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "t", t.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "t", t.initiate, t.map_args)
 
   local T = better_n.create({ initiate = "T", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "T", T.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "T", T.initiate, T.map_args)
 
   local asterisk = better_n.create({ initiate = "*", next = "n", previous = "<s-n>" })
-  vim.keymap.set({ "n", "x" }, "*", asterisk.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "*", asterisk.initiate, asterisk.map_args)
 
   local g_asterisk = better_n.create({ initiate = "g*", next = "n", previous = "<s-n>" })
-  vim.keymap.set({ "n", "x" }, "g*", g_asterisk.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "g*", g_asterisk.initiate, g_asterisk.map_args)
 
   local hash = better_n.create({ initiate = "#", next = "n", previous = "<s-n>" })
-  vim.keymap.set({ "n", "x" }, "#", hash.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "#", hash.initiate, hash.map_args)
 
   local g_hash = better_n.create({ initiate = "g#", next = "n", previous = "<s-n>" })
-  vim.keymap.set({ "n", "x" }, "g#", g_hash.initiate, { expr = true, silent = true })
+  vim.keymap.set({ "n", "x" }, "g#", g_hash.initiate, g_hash.map_args)
 end
 
 local function setup_cmdline_mappings()

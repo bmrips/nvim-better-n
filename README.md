@@ -50,22 +50,14 @@ require("better-n").setup(
 )
 
 -- You create repeatable mappings like this:
-local hunk_navigation = require("better-n").create(
-  {
-    next = require("gitsigns").next_hunk,
-    prev = require("gitsigns").prev_hunk
-  }
-)
+local hunk_navigation = require("better-n").create {
+  next = require("gitsigns").next_hunk,
+  prev = require("gitsigns").prev_hunk
+}
 
-vim.keymap.set({ "n", "x" }, "]h", hunk_navigation.next)
-vim.keymap.set({ "n", "x" }, "[h", hunk_navigation.previous)
 
--- or
-
-vim.keymap.set({ "n", "x" }, "]h", hunk_navigation.next, { expr = true })
-vim.keymap.set({ "n", "x" }, "[h", hunk_navigation.previous, { expr = true })
-
---
+vim.keymap.set({ "n", "x" }, "]h", hunk_navigation.next, hunk_navigation.map_args)
+vim.keymap.set({ "n", "x" }, "[h", hunk_navigation.previous, hunk_navigation.map_args)
 ```
 
 ## Repeatable buffer-local mappings
@@ -77,15 +69,17 @@ To make buffer-local mappings repeatable, you can wrap the mappings in a `FileTy
   "FileType",
   {
     callback = function(args)
-      local repeatable_square_brackets = require("better_n").create({
+      local square_brackets = require("better_n").create({
         next = "]]",
         prev = "[[",
-        remap = true,
-        bufnr = args.buf,
+        map_args = {
+          buffer = args.buf,
+          remap = true,
+        },
       })
 
-      vim.keymap.set("n", "]]", repeatable_square_brackets.next, { buffer = args.buf })
-      vim.keymap.set("n", "[[", repeatable_square_brackets.previous, { buffer = args.buf })
+      vim.keymap.set("n", "]]", square_brackets.next, square_brackets.map_args)
+      vim.keymap.set("n", "[[", square_brackets.previous, square_brackets.map_args)
      end,
   }
 )
