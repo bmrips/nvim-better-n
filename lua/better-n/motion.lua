@@ -2,6 +2,10 @@ local Keymap = require("better-n.lib.keymap")
 
 local M = {}
 
+local function is_key(value)
+  return type(value) == "string"
+end
+
 function M.create(opts)
   local initiate = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts))
   local next = opts.next or error("opts.next is required" .. vim.inspect(opts))
@@ -20,21 +24,22 @@ function M.create(opts)
   if map_args.remap then
     map_args.remap = nil
     local keymap = Keymap:new(mode, map_args.buffer)
-    next = type(next) == "string" and keymap:rhs_of(next) or next
-    previous = type(previous) == "string" and keymap:rhs_of(previous) or previous
+    next = is_key(next) and keymap:rhs_of(next) or next
+    previous = is_key(previous) and keymap:rhs_of(previous) or previous
   end
 
   local function go(action)
     return function()
       vim.keymap.set({ "n", "x" }, "n", next, map_args)
       vim.keymap.set({ "n", "x" }, "<S-n>", previous, map_args)
-      return type(action) == "function" and vim.schedule(action) or action
+      return type(action) == "function" and action() or action
     end
   end
 
-  -- set <expr> since the callback returned by `go()` may return a key
+  -- If one of the actions is a key, set <expr> since the callback returned by
+  -- `go()` returns that key.
   local go_map_args = vim.deepcopy(map_args)
-  go_map_args.expr = true
+  go_map_args.expr = map_args.expr or is_key(initiate) or is_key(next) or is_key(previous)
 
   return {
     initiate = go(initiate),
