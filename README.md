@@ -1,4 +1,5 @@
 # nvim-better-n
+
 Repeat movement commands using `n` in the same vein that `.` repeats action commands.
 
 <div align="center">
@@ -6,6 +7,7 @@ Repeat movement commands using `n` in the same vein that `.` repeats action comm
 </div>
 
 ## About
+
 `nvim-better-n` attempts address a problem with Vim, which is that almost every
 single binding is used by default, for (often) very niche actions. I want to be
 able to reuse convenient bindings for similar things, reducing both mental
@@ -27,6 +29,7 @@ It should also be noted that this frees up both `;`, and `,` for other actions,
 as `n` will instead handle their current task.
 
 ## Install
+
 Install as usual, using your favourite plugin manager.
 
 ```lua
@@ -38,9 +41,9 @@ use "jonatan-branting/nvim-better-n"
 ```lua
 require("better-n").setup(
   {
-    -- These are default values, which can be omitted.
-    -- By default, the following mappings are made repeatable using `n` and `<S-n>`:
-    -- `f`, `F`, `t`, `T`, `*`, `#`, `/`, `?`
+    -- These are default values, which can be omitted. By default, the
+    -- following mappings are made repeatable using `n` and `<S-n>`:
+    -- `f`, `F`, `t`, `T`, `*`, `g*`, `#`, `g#`, `/`, `?`
     disable_default_mappings = false,
     disable_cmdline_mappings = false,
   }
@@ -66,6 +69,7 @@ vim.keymap.set({ "n", "x" }, "[h", hunk_navigation.previous, { expr = true })
 ```
 
 ## Repeatable buffer-local mappings
+
 To make buffer-local mappings repeatable, you can wrap the mappings in a `FileType` autocommand.
 
 ```lua

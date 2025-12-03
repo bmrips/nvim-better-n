@@ -18,8 +18,14 @@ local function setup_default_mappings()
   local asterisk = better_n.create({ initiate = "*", next = "n", previous = "<s-n>" })
   vim.keymap.set({ "n", "x" }, "*", asterisk.initiate, { expr = true, silent = true })
 
+  local g_asterisk = better_n.create({ initiate = "g*", next = "n", previous = "<s-n>" })
+  vim.keymap.set({ "n", "x" }, "g*", g_asterisk.initiate, { expr = true, silent = true })
+
   local hash = better_n.create({ initiate = "#", next = "n", previous = "<s-n>" })
   vim.keymap.set({ "n", "x" }, "#", hash.initiate, { expr = true, silent = true })
+
+  local g_hash = better_n.create({ initiate = "g#", next = "n", previous = "<s-n>" })
+  vim.keymap.set({ "n", "x" }, "g#", g_hash.initiate, { expr = true, silent = true })
 end
 
 local function setup_cmdline_mappings()
