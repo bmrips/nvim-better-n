@@ -13,8 +13,6 @@ function M.create(opts)
   local mode = opts.mode or "n"
   local map_args = opts.map_args or {}
 
-  map_args.silent = true
-
   if type(map_args.buffer) == "boolean" then
     map_args.buffer = map_args.buffer and 0 or nil
   end
