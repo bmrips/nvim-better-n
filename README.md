@@ -38,21 +38,24 @@ use "jonatan-branting/nvim-better-n"
 
 ## Setup
 
+This is the default configuration:
 ```lua
-require("better-n").setup(
-  {
-    -- These are default values, which can be omitted. By default, the
-    -- following mappings are made repeatable using `n` and `<S-n>`:
-    -- `f`, `F`, `t`, `T`, `*`, `g*`, `#`, `g#`, `/`, `?`
-    disable_default_mappings = false,
-    disable_cmdline_mappings = false,
-  }
-)
+require("better-n").setup {
+  -- Preserves n/N to work with /,?,*,g*,#,g#
+  preserve_builtins = true,
 
--- You create repeatable mappings like this:
+  -- Which integrations to enable
+  integrations = {
+    fFtT = true, -- binds n/N to ;/, after f,F,t,T was used
+  },
+}
+```
+
+You create repeatable mappings like this:
+```lua
 local hunk_navigation = require("better-n").create {
   next = require("gitsigns").next_hunk,
-  prev = require("gitsigns").prev_hunk
+  prev = require("gitsigns").prev_hunk,
 }
 
 
