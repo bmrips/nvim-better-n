@@ -60,7 +60,7 @@ function Repeatable:_next()
   if type(self.next_action) == "function" then
     return vim.schedule(self.next_action)
   else
-    return vim.v.count1 .. self.next_action
+    return self.next_action
   end
 end
 
@@ -73,7 +73,7 @@ function Repeatable:_previous()
   if type(self.previous_action) == "function" then
     return vim.schedule(self.previous_action)
   else
-    return vim.v.count1 .. self.previous_action
+    return self.previous_action
   end
 end
 
@@ -86,7 +86,7 @@ function Repeatable:_passthrough()
   if type(self.passthrough_action) == "function" then
     return vim.schedule(self.passthrough_action)
   else
-    return vim.v.count1 .. self.passthrough_action
+    return self.passthrough_action
   end
 end
 
