@@ -73,8 +73,30 @@ local defaults = {
   },
 }
 
+local function is_dict_of_toggles(table)
+  if #table > 0 then
+    return false
+  end
+  for k, v in pairs(table) do
+    if type(k) ~= "string" then
+      return false
+    end
+    if type(v) ~= "boolean" then
+      return false
+    end
+  end
+  return true
+end
+
+local function validate(opts)
+  vim.validate("integrations", opts.integrations, "table", true)
+  vim.validate("integrations", opts.integrations, is_dict_of_toggles, true, "table<string,boolean>")
+  vim.validate("preserve_builtins", opts.preserve_builtins, "boolean", true)
+end
+
 ---@param opts better-n.opts
 function M.apply(opts)
+  validate(opts)
   local config = vim.tbl_deep_extend("keep", opts, defaults)
 
   if config.preserve_builtins then
