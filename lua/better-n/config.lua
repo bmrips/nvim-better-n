@@ -2,12 +2,6 @@ local motion = require("better-n.motion")
 
 local M = {}
 
-local function reset_nN()
-  -- vim.keymap.del throws an error if n/N are not mapped
-  pcall(vim.keymap.del, { "n", "x" }, "n")
-  pcall(vim.keymap.del, { "n", "x" }, "<S-n>")
-end
-
 local function preserve_builtins()
   vim.api.nvim_create_autocmd("CmdlineLeave", {
     pattern = { "/", "\\?" },
@@ -16,13 +10,13 @@ local function preserve_builtins()
       if vim.v.event.abort then
         return
       end
-      reset_nN()
+      motion.reset_nN()
     end,
   })
 
   for _, key in ipairs { "*", "g*", "#", "g#" } do
     vim.keymap.set({ "n", "x" }, key, function()
-      reset_nN()
+      motion.reset_nN()
       return key
     end, { expr = true })
   end
@@ -30,16 +24,16 @@ end
 
 local function integrate_fFtT()
   local f = motion.create({ initiate = "f", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "f", f.initiate, f.map_args)
+  vim.keymap.set(f.modes, "f", f.initiate, f.map_args)
 
   local F = motion.create({ initiate = "F", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "F", F.initiate, F.map_args)
+  vim.keymap.set(F.modes, "F", F.initiate, F.map_args)
 
   local t = motion.create({ initiate = "t", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "t", t.initiate, t.map_args)
+  vim.keymap.set(t.modes, "t", t.initiate, t.map_args)
 
   local T = motion.create({ initiate = "T", next = ";", previous = "," })
-  vim.keymap.set({ "n", "x" }, "T", T.initiate, T.map_args)
+  vim.keymap.set(T.modes, "T", T.initiate, T.map_args)
 end
 
 local defaults = {
