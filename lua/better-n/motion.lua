@@ -21,7 +21,7 @@ function M.create(opts)
   local initiate = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts))
   local next = opts.next or error("opts.next is required" .. vim.inspect(opts))
   local previous = opts.previous or error("opts.previous is required" .. vim.inspect(opts))
-  local modes = opts.modes or { "n", "x" }
+  local modes = opts.modes or { "n", "o", "x" }
   local map_args = opts.map_args or {}
 
   if type(map_args.buffer) == "boolean" then
