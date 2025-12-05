@@ -7,6 +7,7 @@ local scope = {
   modes = {},
 }
 
+---@return nil
 function M.reset_nN()
   -- vim.keymap.del throws an error if n/N are not mapped
   pcall(vim.keymap.del, scope.modes, "n", { buffer = scope.buffer })
@@ -17,6 +18,22 @@ local function is_key(value)
   return type(value) == "string"
 end
 
+---@class better-n.motion.opts
+---@field initiate? string|fun():string? Action that initiates the motion
+---@field next string|fun():string? Action that moves to the next occurrence
+---@field previous string|fun():string? Action that moves to the previous occurrence
+---@field modes? string|string[] The modes in which the motion is available
+---@field map_args? vim.keymap.set.Opts Mapping arguments
+
+---@class better-n.motion.config
+---@field initiate string|fun():string? Action that initiates the motion
+---@field next string|fun():string? Action that moves to the next occurrence
+---@field previous string|fun():string? Action that moves to the previous occurrence
+---@field modes string|string[] The modes in which the motion is available
+---@field map_args vim.keymap.set.Opts Mapping arguments
+
+---@param opts better-n.motion.opts
+---@return better-n.motion.config
 function M.create(opts)
   local initiate = opts.initiate or opts.next or error("opts.next or opts.initiate is required" .. vim.inspect(opts))
   local next = opts.next or error("opts.next is required" .. vim.inspect(opts))

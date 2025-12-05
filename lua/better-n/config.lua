@@ -63,6 +63,9 @@ local function integrate_fFtT()
   vim.keymap.set(T.modes, "T", T.initiate, T.map_args)
 end
 
+---@class better-n.opts
+---@field integrations? table<string,boolean> Which integrations to enable
+---@field preserve_builtins? boolean Whether to preserve n/N behaviour for /,?,*,g*,#,g#
 local defaults = {
   preserve_builtins = true,
   integrations = {
@@ -70,6 +73,7 @@ local defaults = {
   },
 }
 
+---@param opts better-n.opts
 function M.apply(opts)
   local config = vim.tbl_deep_extend("keep", opts, defaults)
 

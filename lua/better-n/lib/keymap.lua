@@ -1,5 +1,7 @@
 local Keymap = {}
 
+---@param mode string In which mode to lookup keymaps
+---@param buffer integer? If given, search the keymaps of the given buffer first
 function Keymap:new(mode, buffer)
   buffer = buffer or 0
 
@@ -18,6 +20,8 @@ end
 
 Keymap.__index = Keymap
 
+---@param key string The key to lookup
+---@return vim.api.keyset.get_keymap?
 function Keymap:lookup(key)
   -- Compare using keycodes to avoid casing issues
   local keycode = vim.keycode(key)
@@ -31,6 +35,8 @@ function Keymap:lookup(key)
   return lookup_in(self.buffer_mappings) or lookup_in(self.global_mappings)
 end
 
+---@param key string The key to lookup
+---@return nil|string|fun():string? rhs The RHS to which the key is mapped, if it is mapped
 function Keymap:rhs_of(key)
   return (self:lookup(key) or {}).rhs
 end
