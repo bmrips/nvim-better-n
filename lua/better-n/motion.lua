@@ -40,9 +40,17 @@ function M.create(opts)
 
   local function go(action)
     return function()
-      vim.keymap.set(modes, "n", next, map_args)
-      vim.keymap.set(modes, "<S-n>", previous, map_args)
-      scope = { buffer = map_args.buffer, modes = modes }
+      local n_map_args = vim.tbl_extend("force", map_args, { desc = "Repeat motion" })
+      vim.keymap.set(modes, "n", next, n_map_args)
+
+      local N_map_args = vim.tbl_extend("force", map_args, { desc = "Repeat opposite motion" })
+      vim.keymap.set(modes, "<S-n>", previous, N_map_args)
+
+      scope = {
+        buffer = map_args.buffer,
+        modes = modes,
+      }
+
       return type(action) == "function" and action() or action
     end
   end
