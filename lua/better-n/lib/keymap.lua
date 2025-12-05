@@ -4,9 +4,12 @@ function Keymap:new(mode, buffer)
   buffer = buffer or 0
 
   local instance = {
-    buffer_mappings = vim.api.nvim_buf_get_keymap(buffer, mode),
     global_mappings = vim.api.nvim_get_keymap(mode),
   }
+
+  if buffer ~= nil then
+    instance.buffer_mappings = vim.api.nvim_buf_get_keymap(buffer, mode)
+  end
 
   setmetatable(instance, Keymap)
 
@@ -22,7 +25,7 @@ function Keymap:lookup(key)
     return vim.keycode(mapping.lhs) == keycode
   end
   local lookup_in = function(list)
-    return vim.tbl_filter(keycodes_match, list)[1]
+    return vim.tbl_filter(keycodes_match, list or {})[1]
   end
 
   return lookup_in(self.buffer_mappings) or lookup_in(self.global_mappings)
