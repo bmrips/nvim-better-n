@@ -1,8 +1,8 @@
-local motion = require("better-n.motion")
-
 local M = {}
 
 local function preserve_builtins()
+  local motion = require("better-n.motion")
+
   vim.api.nvim_create_autocmd("CmdlineLeave", {
     pattern = { "/", "\\?" },
     desc = "Restore n/N after searching",

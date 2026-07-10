@@ -1,5 +1,3 @@
-local Keymap = require("better-n.lib.keymap")
-
 local M = {}
 
 local scope = {
@@ -64,6 +62,7 @@ function M.create(opts)
   -- action that is a key (i.e. a string), extract its right-hand side.
   if cfg.map_args.remap then
     cfg.map_args.remap = nil
+    local Keymap = require("better-n.lib.keymap")
     local keymap = Keymap:new("n", cfg.map_args.buffer)
     cfg.next = is_key(cfg.next) and keymap:rhs_of(cfg.next) or cfg.next
     cfg.previous = is_key(cfg.previous) and keymap:rhs_of(cfg.previous) or cfg.previous

@@ -1,4 +1,8 @@
 return {
-  create = require("better-n.motion").create,
-  setup = require("better-n.config").apply,
+  create = function(opts)
+    return require("better-n.motion").create(opts)
+  end,
+  setup = function(opts)
+    return require("better-n.config").apply(opts)
+  end,
 }
